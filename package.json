@@ -4,14 +4,16 @@
   "description": "Api Rest simple para logueo de usuarios SPA",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "setup": "npm install && npm update",
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alejandro-jalf/usersSpa.git"
   },
   "author": "Jose Alejandro Lopez Flores <aleflo_1996@outlook.com>",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/alejandro-jalf/usersSpa/issues"
   },
@@ -22,6 +24,12 @@
     "express-custom-error": "^1.9.4",
     "joi": "^17.4.0",
     "mandatoryenv": "^3.0.3",
+    "pg": "^8.5.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.5.0",
     "sha1": "^1.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }
