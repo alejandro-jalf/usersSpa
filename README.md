@@ -38,7 +38,7 @@ _https://...._
 | **POST** | api/v1/usuarios/:correo_user/login | { password_user: '' } | Verifica el logueo de un usuario |
 | **PUT** | api/v1/usuarios/:correo_user | { nombre_user: '', apellido_p_user: '', apellido_m_user: '', direccion_user: '', sucursal_user: '', correo_user: '', tipo_user: '', access_to_user: '', activo_user: true } | Modifica los datos de un usuario determinado |
 | **PUT** | api/v1/usuarios/:correo_user/general | { nombre_user: '', apellido_p_user: '', apellido_m_user: '', direccion_user: '' } | Modifica los datos generales del usuario |
-| **PUT** | api/v1/usuarios:correo_user/email | { new_correo_user: '', password_user: '' } | Actualiza la direccion de correo electronico de un usuario |
+| **PUT** | api/v1/usuarios/:correo_user/email | { new_correo_user: '', password_user: '' } | Actualiza la direccion de correo electronico de un usuario |
 | **PUT** | api/v1/usuarios/:correo_user/password | { password_user: '', new_password_user: '' } | Modifica la contraseña actual del usuario |
 | **PUT** | api/v1/usuarios/:correo_user/recovery | | Recupera la cuenta de un usuario |
 | **PUT** | api/v1/usuarios/:correo_user/status | { activo_user: true } | Cambia el status de un usuario puede enviar true o false |
