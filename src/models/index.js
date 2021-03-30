@@ -51,12 +51,11 @@ const models = (() => {
             const result = await accessToDataBase.query(
                 `INSERT INTO users(
                     nombre_user, apellido_p_user, apellido_m_user, direccion_user, sucursal_user,
-                    correo_user, password_user, recovery_code_user, tipo_user, access_to_user, activo_user
+                    correo_user, password_user, tipo_user, access_to_user
                 ) VALUES(
                     '${bodyUser.nombre_user}', '${bodyUser.apellido_p_user}', '${bodyUser.apellido_m_user}',
                     '${bodyUser.direccion_user}', '${bodyUser.sucursal_user}', '${bodyUser.correo_user}',
-                    '${bodyUser.password_user}', '${bodyUser.recovery_code_user}', '${bodyUser.tipo_user}',
-                    '${bodyUser.access_to_user}', ${bodyUser.activo_user}
+                    '${bodyUser.password_user}', '${bodyUser.tipo_user}','${bodyUser.access_to_user}'
                 )`,
                 QueryTypes.INSERT
             );
