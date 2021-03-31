@@ -1,6 +1,7 @@
 const { createContentAssert, createContentError } = require('../utils');
 const {
     schemaCreateUser,
+    schemaLogin,
     schemaUpdateUser,
     schemaUpdateDataGeneral,
     schemaContentLetters,
@@ -26,6 +27,15 @@ const validations = (() => {
         resultValidate = schemaContentNumbers.validate(bodyUser.password_user);
         if (resultValidate.error) {
             return createContentError("La contraseña debe contener al menos un numero", resultValidate.error);
+        }
+
+        return createContentAssert("Validacion correcta");
+    }
+
+    const validateBodyLogin = (bodyLogin) => {
+        let resultValidate = schemaCreateUser.validate(bodyLogin);
+        if (resultValidate.error) {
+            return createContentError("Algun dato fue enviado de manera incorrecta", resultValidate.error);
         }
 
         return createContentAssert("Validacion correcta");
@@ -99,6 +109,7 @@ const validations = (() => {
 
     return {
         validateBodyCrateUser,
+        validateBodyLogin,
         validateBodyUpdateUser,
         validateBodyUpdateDataUser,
         validateBodyUpdateEmail,

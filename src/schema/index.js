@@ -18,6 +18,11 @@ const schemas = (() => {
         access_to_user: joi.string().min(1).required()
     });
 
+    const schemaLogin = joi.object({
+        correo_user: joi.string().min(1).max(70).email().required(),
+        password_user: joi.string().min(1).max(150).required()
+    });
+
     const schemaUpdateUser = joi.object({
         nombre_user: joi.string().min(1).max(35).required(),
         apellido_p_user: joi.string().min(1).max(35).required(),
@@ -57,6 +62,7 @@ const schemas = (() => {
         schemaContentLetters,
         schemaContentNumbers,
         schemaCreateUser,
+        schemaLogin,
         schemaUpdateUser,
         schemaUpdateDataGeneral,
         schemaUpdateEmail,
