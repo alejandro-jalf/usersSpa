@@ -15,10 +15,10 @@ app.use("*", (req, res, next) => {
 const { validateOrigin } = require("./middlewares");
 app.use(validateOrigin);
 
-const bodyParse = require("body-parser");
+// const bodyParse = require("body-parser");
 
-app.use(bodyParse.urlencoded({ extended: true }));
-app.use(bodyParse.json());
+// app.use(bodyParse.urlencoded({ extended: true }));
+// app.use(bodyParse.json());
 
 app.use("*", (req, res, next) => {
     if (typeof req.body === "string") {

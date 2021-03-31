@@ -6,8 +6,30 @@ const {
     createContentError
 } = require("../utils");
 
+const postgres = require('postgres');
+
 const models = (() => {
     conexion.setConfig(dbpostgresql);
+
+    const modelGetAllUserPG = async (stringConection) => {
+        try {
+            const sql = postgres(stringConection, {
+                ssl: true,
+                max: 10
+            })
+
+            const result = await sql`
+                SELECT * FROM users
+            `;
+            return createContentAssert('Datos encontrados en la base de datos', result);
+        } catch (error) {
+            console.log(error);
+            return createContentError(
+                'Fallo la conexion con base de datos al intentar buscar los usuarios',
+                error
+            );
+        }
+    }
 
     const modelGetAllUser = async (stringConection) => {
         try {
@@ -19,6 +41,7 @@ const models = (() => {
             await conexion.closeConexion();
             return createContentAssert('Datos encontrados en la base de datos', result);
         } catch (error) {
+            console.log(error);
             return createContentError(
                 'Fallo la conexion con base de datos al intentar buscar los usuarios',
                 error
@@ -206,6 +229,7 @@ const models = (() => {
     }
 
     return {
+        modelGetAllUserPG,
         modelGetAllUser,
         modelGetUserByEmail,
         modelCreateUser,

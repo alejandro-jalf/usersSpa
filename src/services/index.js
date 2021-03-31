@@ -1,11 +1,17 @@
 const { createResponse, createContentAssert } = require("../utils");
+const { cadenaConexion } = require('../configs');
+const { modelGetAllUser, modelGetAllUserPG } = require("../models");
+
 const services = (() => {
 
+    const getAllUsersPG = async () => {
+        const result = await modelGetAllUserPG(cadenaConexion);
+        return createResponse(200, result);
+    }
+
     const getAllUsers = async () => {
-        return createResponse(
-            200,
-            createContentAssert('Ruta getAllUsers aun no displonible')
-        );
+        const result = await modelGetAllUser(cadenaConexion);
+        return createResponse(200, result);
     }
 
     const getUserByEmail = async (correo_user) => {
@@ -79,6 +85,7 @@ const services = (() => {
     }
 
     return {
+        getAllUsersPG,
         getAllUsers,
         getUserByEmail,
         createUser,

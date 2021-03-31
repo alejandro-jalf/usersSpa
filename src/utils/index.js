@@ -1,5 +1,6 @@
 const sha1 = require("sha1");
-const mail = require("nodemailer");
+const Sequelize = require('sequelize');
+// const mail = require("nodemailer");
 
 const utils = (() => {
     const _arrayMonths = [
@@ -106,18 +107,25 @@ const utils = (() => {
         return response;
     }
 
-    const dbpostgresql = () => {
+    const dbpostgresql = (cadenaConexion) => {
         return new Sequelize(cadenaConexion, {
-            pool: { max: 10, min: 0, acquire: 30000, idle: 10000 },
+            dialect: "postgres",
+            protocol: "postgres",
+            // port: 5432,
+            // host: "ec2-52-45-73-150.compute-1.amazonaws.com",
+            // logging: true,
+            // pool: { max: 10, min: 0, acquire: 30000, idle: 10000 },
             dialectOptions: {
-                options: {
-                    useUTC: false,
-                    dateFirst: 1,
-                    enableArithAbort: true,
-                    trustServerCertificate: true,
-                },
+            //     // native: true,
+                ssl: true,
+            //     options: {
+            //         useUTC: false,
+            //         dateFirst: 1,
+            //         enableArithAbort: true,
+            //         trustServerCertificate: true,
+            //     },
             },
-            define: { timestamps: false },
+            // define: { timestamps: false },
         });
     }
 

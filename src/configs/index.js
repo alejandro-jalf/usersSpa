@@ -7,6 +7,7 @@ const configs = (() => {
     const token = process.env.USERSPA_TOKEN;
     const origin1 = process.env.USERSPA_ORIGIN1;
     const origin2 = process.env.USERSPA_ORIGIN2;
+    const cadenaConexion = process.env.USERSPA_CONECTION;
 
     const listOriginAccept = [origin1, origin2];
 
@@ -15,6 +16,7 @@ const configs = (() => {
         node_env,
         token,
         listOriginAccept,
+        cadenaConexion,
     }
 })();
 
