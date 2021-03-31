@@ -37,7 +37,7 @@ const models = (() => {
                 QueryTypes.SELECT
             );
             await conexion.closeConexion();
-            return createContentAssert(`Datos encontrados del usuario ${correo_user}`, result);
+            return createContentAssert(`Datos encontrados del usuario ${correo_user}`, result[0]);
         } catch (error) {
             return createContentError(
                 'Fallo la conexion con base de datos al intentar buscar al usuario ' + correo_user,

@@ -19,7 +19,6 @@ const schemas = (() => {
     });
 
     const schemaLogin = joi.object({
-        correo_user: joi.string().min(1).max(70).email().required(),
         password_user: joi.string().min(1).max(150).required()
     });
 
