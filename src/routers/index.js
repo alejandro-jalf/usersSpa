@@ -11,7 +11,6 @@ const {
     getUserByEmail,
     updatePassword,
     updateDataGeneral,
-    getAllUsersPG,
 } = require("../services");
 
 router.route('/api/v1').get(async (req, res) => {
@@ -23,11 +22,6 @@ router.route('/api/v1').get(async (req, res) => {
 
 router.route('/api/v1/usuarios').get(async (req, res) => {
     const { status, response } = await getAllUsers();
-    res.status(status).json(response);
-});
-
-router.route('/api/v1/usuariosPostgres').get(async (req, res) => {
-    const { status, response } = await getAllUsersPG();
     res.status(status).json(response);
 });
 

@@ -111,21 +111,20 @@ const utils = (() => {
         return new Sequelize(cadenaConexion, {
             dialect: "postgres",
             protocol: "postgres",
-            // port: 5432,
-            // host: "ec2-52-45-73-150.compute-1.amazonaws.com",
-            // logging: true,
-            // pool: { max: 10, min: 0, acquire: 30000, idle: 10000 },
+            pool: { max: 10, min: 0, acquire: 30000, idle: 10000 },
             dialectOptions: {
-            //     // native: true,
-                ssl: true,
-            //     options: {
-            //         useUTC: false,
-            //         dateFirst: 1,
-            //         enableArithAbort: true,
-            //         trustServerCertificate: true,
-            //     },
+                native: true,
+                ssl: {
+                    rejectUnauthorized: false
+                },
+                options: {
+                    useUTC: false,
+                    dateFirst: 1,
+                    enableArithAbort: true,
+                    trustServerCertificate: true,
+                },
             },
-            // define: { timestamps: false },
+            define: { timestamps: false },
         });
     }
 

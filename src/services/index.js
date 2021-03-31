@@ -1,14 +1,8 @@
 const { createResponse, createContentAssert } = require("../utils");
 const { cadenaConexion } = require('../configs');
-const { modelGetAllUser, modelGetAllUserPG } = require("../models");
+const { modelGetAllUser } = require("../models");
 
 const services = (() => {
-
-    const getAllUsersPG = async () => {
-        const result = await modelGetAllUserPG(cadenaConexion);
-        return createResponse(200, result);
-    }
-
     const getAllUsers = async () => {
         const result = await modelGetAllUser(cadenaConexion);
         return createResponse(200, result);
@@ -85,7 +79,6 @@ const services = (() => {
     }
 
     return {
-        getAllUsersPG,
         getAllUsers,
         getUserByEmail,
         createUser,
