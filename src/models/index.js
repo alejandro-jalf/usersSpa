@@ -137,7 +137,7 @@ const models = (() => {
             const accessToDataBase = conexion.getConexion(stringConection);
             const result = await accessToDataBase.query(
                 `UPDATE users SET
-                    password_user = '${bodyPassword.password_user}'
+                    password_user = '${bodyPassword.new_password_user}'
                 WHERE correo_user = '${correo_user}'`,
                 QueryTypes.UPDATE
             );
@@ -180,7 +180,8 @@ const models = (() => {
                 QueryTypes.UPDATE
             );
             await conexion.closeConexion();
-            return createContentAssert('Se ha actualizado el status del usuario ' + correo_user, result);
+            const status = bodyStatus.activo_user ? 'Activo' : 'Inactivo';
+            return createContentAssert(`Se ha actualizado el status del usuario ${correo_user} a ${status}`, result);
         } catch (error) {
             return createContentError(
                 'Fallo la conexion con base de datos al intentar modificar el status del usuario ' + correo_user,
