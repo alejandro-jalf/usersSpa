@@ -137,7 +137,8 @@ const models = (() => {
             const accessToDataBase = conexion.getConexion(stringConection);
             const result = await accessToDataBase.query(
                 `UPDATE users SET
-                    password_user = '${bodyPassword.new_password_user}'
+                    password_user = '${bodyPassword.new_password_user}',
+                    recovery_code_user = 'empty'
                 WHERE correo_user = '${correo_user}'`,
                 QueryTypes.UPDATE
             );

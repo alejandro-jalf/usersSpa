@@ -61,10 +61,17 @@ const services = (() => {
         const password_user_encript = encriptData(bodyLogin.password_user);
 
         if (password_user_encript !== dataBaseUser.password_user) {
-            return createResponse(
-                401,
-                createContentError('La contraseña es incorrecta')
-            );
+            if (dataBaseUser.recovery_code_user === 'empty') {
+                return createResponse(
+                    401,
+                    createContentError('La contraseña es incorrecta')
+                );
+            }
+            if (dataBaseUser.recovery_code_user !== bodyLogin.password_user)
+                return createResponse(
+                    401,
+                    createContentError('La contraseña y el codigo de recuperacion es incorrecto')
+                );
         }
 
         delete dataBaseUser.password_user;
