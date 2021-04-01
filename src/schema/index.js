@@ -42,11 +42,13 @@ const schemas = (() => {
     });
 
     const schemaUpdateEmail = joi.object({
-        correo_user: joi.string().min(1).max(70).email().required()
+        correo_user: joi.string().min(1).max(70).email().required(),
+        password_user: joi.string().min(1).max(150).required()
     });
 
     const schemaUpdatePassword = joi.object({
-        password_user: joi.string().min(1).max(150).required()
+        password_user: joi.string().min(1).max(150).required(),
+        new_password_user: joi.string().min(1).max(150).required()
     });
 
     const schemaUpdateRecovery = joi.object({

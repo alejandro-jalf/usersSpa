@@ -19,6 +19,10 @@ const validations = (() => {
             return createContentError("Algun dato fue enviado de manera incorrecta", resultValidate.error);
         }
 
+        if (bodyUser.password_user.length < 7) {
+            return createContentError('La contraseña debe ser mayor de 6 caracteres');
+        }
+
         resultValidate = schemaContentLetters.validate(bodyUser.password_user);
         if (resultValidate.error) {
             return createContentError("La contraseña debe contener al menos una letra", resultValidate.error);
@@ -74,12 +78,16 @@ const validations = (() => {
             return createContentError("Algun dato fue enviado de manera incorrecta", resultValidate.error);
         }
 
-        resultValidate = schemaContentLetters.validate(bodyPassword.password_user);
+        if (bodyUser.new_password_user.length < 7) {
+            return createContentError('La contraseña debe ser mayor de 6 caracteres');
+        }
+
+        resultValidate = schemaContentLetters.validate(bodyPassword.new_password_user);
         if (resultValidate.error) {
             return createContentError("La contraseña debe contener al menos una letra", resultValidate.error);
         }
 
-        resultValidate = schemaContentNumbers.validate(bodyPassword.password_user);
+        resultValidate = schemaContentNumbers.validate(bodyPassword.new_password_user);
         if (resultValidate.error) {
             return createContentError("La contraseña debe contener al menos un numero", resultValidate.error);
         }
