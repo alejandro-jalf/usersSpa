@@ -1,8 +1,8 @@
 const { createResponse, createContentAssert, createContentError, encriptData } = require("../utils");
 const { cadenaConexion } = require('../configs');
-const { modelGetAllUser, modelGetUserByEmail, modelCreateUser } = require("../models");
+const { modelGetAllUser, modelGetUserByEmail, modelCreateUser, modelUpdateUSer, modelUpdateDataGeneral, modelUpdatePassword, modelUpdateEmail, modelUpdateStatus, modelDeleteUser } = require("../models");
 const {
-    validateBodyCrateUser, validateBodyLogin,
+    validateBodyCrateUser, validateBodyLogin, validateBodyUpdateUser, validateBodyUpdateDataUser, validateBodyUpdateEmail, validateBodyUpdatePassword, validateBodyUpdateStatus,
 } = require('../validations');
 
 const services = (() => {
@@ -17,7 +17,8 @@ const services = (() => {
     const getUserByEmail = async (correo_user) => {
         const response = await modelGetUserByEmail(cadenaConexion, correo_user);
         if (response.data.length === 0) {
-            return createResponse(200, 
+            return createResponse(
+                200, 
                 createContentError(`El usuario ${correo_user} no esta registrado`)
             );
         }
@@ -30,6 +31,7 @@ const services = (() => {
             return createResponse(400, validate)
         }
 
+        bodyUser.password_user = encriptData(bodyUser.password_user);
         const result = await modelCreateUser(cadenaConexion, bodyUser);
         if (!result.success) {
             return createResponse(500, result);
@@ -48,48 +50,165 @@ const services = (() => {
             return createResponse(500, resultQuery);
         }
 
-        if (resultQuery.data.length === 0) {
-            return createResponse(401, 
+        const dataBaseUser = resultQuery.data;
+        if (dataBaseUser.length === 0) {
+            return createResponse(
+                401, 
                 createContentError(`El usuario ${correo_user} no esta registrado`)
             );
         }
 
         const password_user_encript = encriptData(bodyLogin.password_user);
-        if (password_user_encript !== bodyLogin.password_user) {
-            return createResponse(401,
+
+        if (password_user_encript !== dataBaseUser.password_user) {
+            return createResponse(
+                401,
                 createContentError('La contraseña es incorrecta')
             );
         }
 
-        
+        delete dataBaseUser.password_user;
+        delete dataBaseUser.recovery_code_user;
+
+        return createResponse(
+            200,
+            createContentAssert(`Bienvenido ${dataBaseUser.correo_user}`, dataBaseUser)
+        );
     }
 
     const updateUSer = async (correo_user, bodyUser) => {
-        return createResponse(
-            200,
-            createContentAssert('Ruta updateUSer aun no displonible')
-        );
+        const resultValidate = validateBodyUpdateUser(bodyUser);
+        if (!resultValidate.success)
+            return createResponse(400, resultValidate);
+
+        let resultQuery = await modelGetUserByEmail(correo_user);
+        if (!resultQuery.success)
+            return createResponse(500, resultQuery);
+
+        const dataBaseUser = resultQuery.data;
+        if (dataBaseUser.length === 0)
+            return createResponse(
+                200,
+                createContentError(`El usuario ${correo_user} no existe`)
+            );
+
+        if (dataBaseUser.correo_user !== bodyUser.correo_user) {
+            resultQuery = await modelGetUserByEmail(bodyUser.correo_user);
+            if (!resultQuery.success) return createResponse(500, resultQuery);
+
+            if (resultQuery.data.length > 0) return createResponse(
+                200,
+                createContentError(`El correo ${bodyUser.correo_user} ya esta dado de alta en la base de datos`)
+            );
+        }
+
+        resultQuery = await modelUpdateUSer(cadenaConexion, correo_user, bodyUser);
+        if (!resultQuery.success) return createResponse(500, resultQuery);
+
+        return createResponse(200, resultQuery);
     }
 
     const updateDataGeneral = async (correo_user, bodyUser) => {
-        return createResponse(
-            200,
-            createContentAssert('Ruta updateDataGeneral aun no displonible')
-        );
+        const resultValidate = validateBodyUpdateDataUser(bodyUser);
+        if (!resultValidate.success)
+            return createResponse(400, resultValidate);
+
+        let resultQuery = await modelGetUserByEmail(correo_user);
+        if (!resultQuery.success)
+            return createResponse(500, resultQuery);
+
+        const dataBaseUser = resultQuery.data;
+        if (dataBaseUser.length === 0)
+            return createResponse(
+                200,
+                createContentError(`El usuario ${correo_user} no existe`)
+            );
+
+        resultQuery = await modelUpdateDataGeneral(cadenaConexion, correo_user, bodyUser);
+        if (!resultQuery.success) return createResponse(500, resultQuery);
+        
+        return createResponse(200, resultQuery);
     }
 
     const updateEmail = async (correo_user, bodyEmail) => {
+        const resultValidate = validateBodyUpdateEmail(bodyEmail);
+        if (!resultValidate.success)
+            return createResponse(400, resultValidate);
+
+        if (correo_user === bodyEmail.correo_user)
         return createResponse(
             200,
-            createContentAssert('Ruta updateEmail aun no displonible')
+            createContentError('El correo nuevo y el actual son iguales')
         );
+
+        let resultQuery = await modelGetUserByEmail(correo_user);
+        if (!resultQuery.success)
+            return createResponse(500, resultQuery);
+
+        const dataBaseUser = resultQuery.data;
+        if (dataBaseUser.length === 0)
+            return createResponse(
+                200,
+                createContentError(`El usuario ${correo_user} no existe`)
+            );
+
+        const password_user_encript = encriptData(bodyEmail.password_user);
+        if (dataBaseUser.password_user !== password_user_encript)
+            return createResponse(
+                401,
+                createContentError('La contraseña es incorrecta')
+            );
+
+        resultQuery = await modelGetUserByEmail(bodyEmail.correo_user);
+        if (!resultQuery.success) return createResponse(500, resultQuery);
+
+        if (resultQuery.data.length > 0) return createResponse(
+            200,
+            createContentError(`El correo ${bodyEmail.correo_user} ya esta dado de alta en la base de datos`)
+        );
+
+        resultQuery = await modelUpdateEmail(cadenaConexion, correo_user, bodyEmail);
+        if (!resultQuery.success) return createResponse(500, resultQuery);
+
+        return createResponse(200, resultQuery);
     }
 
     const updatePassword = async (correo_user, bodyPassword) => {
+        const resultValidate = validateBodyUpdatePassword(bodyPassword);
+        if (!resultValidate.success)
+            return createResponse(400, resultValidate);
+
+        const password_user_encript = encriptData(bodyPassword.password_user);
+        const new_password_user_encript = encriptData(bodyPassword.new_password_user);
+
+        if (bodyPassword.new_password_user === bodyPassword.password_user)
         return createResponse(
             200,
-            createContentAssert('Ruta updatePassword aun no displonible')
+            createContentError('La contraseña nueva es igual a la que tiene actualmente')
         );
+
+        let resultQuery = await modelGetUserByEmail(correo_user);
+        if (!resultQuery.success)
+            return createResponse(500, resultQuery);
+
+        const dataBaseUser = resultQuery.data;
+        if (dataBaseUser.length === 0)
+            return createResponse(
+                200,
+                createContentError(`El usuario ${correo_user} no existe`)
+            );
+
+        if (dataBaseUser.password_user !== password_user_encript)
+            return createResponse(
+                401,
+                createContentError('La contraseña es incorrecta')
+            );
+
+        bodyPassword.new_password_user = new_password_user_encript;
+        resultQuery = await modelUpdatePassword(cadenaConexion, correo_user, bodyPassword);
+        if (!resultQuery.success) return createResponse(500, resultQuery);
+
+        return createResponse(200, resultQuery);
     }
 
     const recoveryCount = async (correo_user) => {
@@ -100,17 +219,43 @@ const services = (() => {
     }
 
     const updateStatus = async (correo_user, bodyStatus) => {
-        return createResponse(
-            200,
-            createContentAssert('Ruta updateStatus aun no displonible')
-        );
+        const resultValidate = validateBodyUpdateStatus(bodyStatus);
+        if (!resultValidate.success)
+            return createResponse(400, resultValidate);
+
+        let resultQuery = await modelGetUserByEmail(correo_user);
+        if (!resultQuery.success)
+            return createResponse(500, resultQuery);
+
+        const dataBaseUser = resultQuery.data;
+        if (dataBaseUser.length === 0)
+            return createResponse(
+                200,
+                createContentError(`El usuario ${correo_user} no existe`)
+            );
+
+        resultQuery = await modelUpdateStatus(cadenaConexion, correo_user, bodyStatus);
+        if (!resultQuery.success) return createResponse(500, resultQuery);
+
+        return createResponse(200, resultQuery);
     }
 
     const deleteUser = async (correo_user) => {
-        return createResponse(
-            200,
-            createContentAssert('Ruta deleteUser aun no displonible')
-        );
+        let resultQuery = await modelGetUserByEmail(correo_user);
+        if (!resultQuery.success)
+            return createResponse(500, resultQuery);
+
+        const dataBaseUser = resultQuery.data;
+        if (dataBaseUser.length === 0)
+            return createResponse(
+                200,
+                createContentError(`El usuario ${correo_user} no existe`)
+            );
+
+        resultQuery = await modelDeleteUser(cadenaConexion, correo_user);
+        if (!resultQuery.success) return createResponse(500, resultQuery);
+
+        return createResponse(200, resultQuery);
     }
 
     return {
