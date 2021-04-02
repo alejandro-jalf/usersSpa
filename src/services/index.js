@@ -1,8 +1,31 @@
-const { createResponse, createContentAssert, createContentError, encriptData } = require("../utils");
 const { cadenaConexion } = require('../configs');
-const { modelGetAllUser, modelGetUserByEmail, modelCreateUser, modelUpdateUSer, modelUpdateDataGeneral, modelUpdatePassword, modelUpdateEmail, modelUpdateStatus, modelDeleteUser } = require("../models");
 const {
-    validateBodyCrateUser, validateBodyLogin, validateBodyUpdateUser, validateBodyUpdateDataUser, validateBodyUpdateEmail, validateBodyUpdatePassword, validateBodyUpdateStatus,
+    createResponse,
+    createContentAssert,
+    createContentError,
+    encriptData,
+    sendEmail,
+} = require("../utils");
+const {
+    modelGetAllUser,
+    modelGetUserByEmail,
+    modelCreateUser,
+    modelUpdateUSer,
+    modelUpdateDataGeneral,
+    modelUpdatePassword,
+    modelUpdateEmail,
+    modelUpdateStatus,
+    modelDeleteUser,
+    modelUpdateRecoveryCode
+} = require("../models");
+const {
+    validateBodyCrateUser,
+    validateBodyLogin,
+    validateBodyUpdateUser,
+    validateBodyUpdateDataUser,
+    validateBodyUpdateEmail,
+    validateBodyUpdatePassword,
+    validateBodyUpdateStatus,
 } = require('../validations');
 
 const services = (() => {
@@ -219,10 +242,40 @@ const services = (() => {
     }
 
     const recoveryCount = async (correo_user) => {
-        return createResponse(
-            200,
-            createContentAssert('Ruta recoveryCount aun no displonible')
-        );
+        let resultQuery = await modelGetUserByEmail(correo_user);
+        if (!resultQuery.success)
+            return createResponse(500, resultQuery);
+
+        const dataBaseUser = resultQuery.data;
+        if (dataBaseUser.length === 0)
+            return createResponse(
+                200,
+                createContentError(`El usuario ${correo_user} no existe`)
+            );
+
+        const caracteres = "abcdefghijkmnpqrtuvwxyzABCDEFGHJKMNPQRTUVWXYZ012346789";
+        let codigo = "";
+        for (i=0; i<13; i++) codigo +=caracteres.charAt(Math.floor(Math.random()*caracteres.length));
+
+        const bodyRecovery = { recovery_code_user: codigo };
+
+        resultQuery = await modelUpdateRecoveryCode(cadenaConexion, correo_user, bodyRecovery);
+        if (!resultQuery.success) return createResponse(500, resultQuery);
+
+        const resultMail = await sendEmail(correo_user, codigo);
+        if (!resultMail.success){
+            const bodyRecovery = { recovery_code_user: 'empty' };
+            resultQuery = await modelUpdateRecoveryCode(cadenaConexion, correo_user, bodyRecovery);
+            if (!resultQuery.success) return createResponse(500, resultQuery);
+            
+            return createResponse(
+                500,
+                createContentError('Ocurrio un error al intentar enviar el codigo de recuperacion a su correo, por favor intentelo mas tarde')
+            );
+        }
+
+
+        return createResponse(200, resultQuery);
     }
 
     const updateStatus = async (correo_user, bodyStatus) => {

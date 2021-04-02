@@ -101,10 +101,10 @@ const utils = (() => {
                 `
             });
 
-            return createResponse(200, createContentAssert('Correo enviado', info));
+            return createContentAssert('Correo enviado', info);
         } catch (error) {
             console.log(error);
-            return createResponse(400, createContentError('Error al enviar el correo', error));
+            return createContentError('Error al enviar el correo', error);
         }
     }
 
