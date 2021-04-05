@@ -63,12 +63,13 @@ const services = (() => {
     }
 
     const login = async (correo_user, bodyLogin) => {
+        // console.log('Login: ', bodyLogin);
         const resulValidate = validateBodyLogin(bodyLogin);
         if (!resulValidate.success) {
             return createResponse(400, resulValidate)
         }
 
-        const resultQuery = await modelGetUserByEmail(correo_user);
+        const resultQuery = await modelGetUserByEmail(cadenaConexion, correo_user);
         if (!resultQuery.success) {
             return createResponse(500, resultQuery);
         }
@@ -111,7 +112,7 @@ const services = (() => {
         if (!resultValidate.success)
             return createResponse(400, resultValidate);
 
-        let resultQuery = await modelGetUserByEmail(correo_user);
+        let resultQuery = await modelGetUserByEmail(cadenaConexion, correo_user);
         if (!resultQuery.success)
             return createResponse(500, resultQuery);
 
@@ -123,7 +124,7 @@ const services = (() => {
             );
 
         if (dataBaseUser.correo_user !== bodyUser.correo_user) {
-            resultQuery = await modelGetUserByEmail(bodyUser.correo_user);
+            resultQuery = await modelGetUserByEmail(cadenaConexion, bodyUser.correo_user);
             if (!resultQuery.success) return createResponse(500, resultQuery);
 
             if (resultQuery.data.length > 0) return createResponse(
@@ -143,7 +144,7 @@ const services = (() => {
         if (!resultValidate.success)
             return createResponse(400, resultValidate);
 
-        let resultQuery = await modelGetUserByEmail(correo_user);
+        let resultQuery = await modelGetUserByEmail(cadenaConexion, correo_user);
         if (!resultQuery.success)
             return createResponse(500, resultQuery);
 
@@ -171,7 +172,7 @@ const services = (() => {
             createContentError('El correo nuevo y el actual son iguales')
         );
 
-        let resultQuery = await modelGetUserByEmail(correo_user);
+        let resultQuery = await modelGetUserByEmail(cadenaConexion, correo_user);
         if (!resultQuery.success)
             return createResponse(500, resultQuery);
 
@@ -189,7 +190,7 @@ const services = (() => {
                 createContentError('La contraseña es incorrecta')
             );
 
-        resultQuery = await modelGetUserByEmail(bodyEmail.correo_user);
+        resultQuery = await modelGetUserByEmail(cadenaConexion, bodyEmail.correo_user);
         if (!resultQuery.success) return createResponse(500, resultQuery);
 
         if (resultQuery.data.length > 0) return createResponse(
@@ -217,7 +218,7 @@ const services = (() => {
             createContentError('La contraseña nueva es igual a la que tiene actualmente')
         );
 
-        let resultQuery = await modelGetUserByEmail(correo_user);
+        let resultQuery = await modelGetUserByEmail(cadenaConexion, correo_user);
         if (!resultQuery.success)
             return createResponse(500, resultQuery);
 
@@ -242,7 +243,7 @@ const services = (() => {
     }
 
     const recoveryCount = async (correo_user) => {
-        let resultQuery = await modelGetUserByEmail(correo_user);
+        let resultQuery = await modelGetUserByEmail(cadenaConexion, correo_user);
         if (!resultQuery.success)
             return createResponse(500, resultQuery);
 
@@ -283,7 +284,7 @@ const services = (() => {
         if (!resultValidate.success)
             return createResponse(400, resultValidate);
 
-        let resultQuery = await modelGetUserByEmail(correo_user);
+        let resultQuery = await modelGetUserByEmail(cadenaConexion, correo_user);
         if (!resultQuery.success)
             return createResponse(500, resultQuery);
 
@@ -301,7 +302,7 @@ const services = (() => {
     }
 
     const deleteUser = async (correo_user) => {
-        let resultQuery = await modelGetUserByEmail(correo_user);
+        let resultQuery = await modelGetUserByEmail(cadenaConexion, correo_user);
         if (!resultQuery.success)
             return createResponse(500, resultQuery);
 
