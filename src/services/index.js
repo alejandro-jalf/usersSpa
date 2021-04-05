@@ -63,7 +63,6 @@ const services = (() => {
     }
 
     const login = async (correo_user, bodyLogin) => {
-        // console.log('Login: ', bodyLogin);
         const resulValidate = validateBodyLogin(bodyLogin);
         if (!resulValidate.success) {
             return createResponse(400, resulValidate)
@@ -74,8 +73,8 @@ const services = (() => {
             return createResponse(500, resultQuery);
         }
 
-        const dataBaseUser = resultQuery.data;
-        if (dataBaseUser.length === 0) {
+        const dataBaseUser = resultQuery.data[0];
+        if (Object.values(dataBaseUser).length === 0) {
             return createResponse(
                 401, 
                 createContentError(`El usuario ${correo_user} no esta registrado`)
@@ -116,8 +115,8 @@ const services = (() => {
         if (!resultQuery.success)
             return createResponse(500, resultQuery);
 
-        const dataBaseUser = resultQuery.data;
-        if (dataBaseUser.length === 0)
+        const dataBaseUser = resultQuery.data[0];
+        if (Object.values(dataBaseUser).length === 0)
             return createResponse(
                 200,
                 createContentError(`El usuario ${correo_user} no existe`)
@@ -148,8 +147,8 @@ const services = (() => {
         if (!resultQuery.success)
             return createResponse(500, resultQuery);
 
-        const dataBaseUser = resultQuery.data;
-        if (dataBaseUser.length === 0)
+        const dataBaseUser = resultQuery.data[0];
+        if (Object.values(dataBaseUser).length === 0)
             return createResponse(
                 200,
                 createContentError(`El usuario ${correo_user} no existe`)
@@ -176,8 +175,8 @@ const services = (() => {
         if (!resultQuery.success)
             return createResponse(500, resultQuery);
 
-        const dataBaseUser = resultQuery.data;
-        if (dataBaseUser.length === 0)
+        const dataBaseUser = resultQuery.data[0];
+        if (Object.values(dataBaseUser).length === 0)
             return createResponse(
                 200,
                 createContentError(`El usuario ${correo_user} no existe`)
@@ -222,8 +221,8 @@ const services = (() => {
         if (!resultQuery.success)
             return createResponse(500, resultQuery);
 
-        const dataBaseUser = resultQuery.data;
-        if (dataBaseUser.length === 0)
+        const dataBaseUser = resultQuery.data[0];
+        if (Object.values(dataBaseUser).length === 0)
             return createResponse(
                 200,
                 createContentError(`El usuario ${correo_user} no existe`)
@@ -247,8 +246,8 @@ const services = (() => {
         if (!resultQuery.success)
             return createResponse(500, resultQuery);
 
-        const dataBaseUser = resultQuery.data;
-        if (dataBaseUser.length === 0)
+        const dataBaseUser = resultQuery.data[0];
+        if (Object.values(dataBaseUser).length === 0)
             return createResponse(
                 200,
                 createContentError(`El usuario ${correo_user} no existe`)
@@ -288,8 +287,8 @@ const services = (() => {
         if (!resultQuery.success)
             return createResponse(500, resultQuery);
 
-        const dataBaseUser = resultQuery.data;
-        if (dataBaseUser.length === 0)
+        const dataBaseUser = resultQuery.data[0];
+        if (Object.values(dataBaseUser).length === 0)
             return createResponse(
                 200,
                 createContentError(`El usuario ${correo_user} no existe`)
@@ -306,8 +305,8 @@ const services = (() => {
         if (!resultQuery.success)
             return createResponse(500, resultQuery);
 
-        const dataBaseUser = resultQuery.data;
-        if (dataBaseUser.length === 0)
+        const dataBaseUser = resultQuery.data[0];
+        if (Object.values(dataBaseUser).length === 0)
             return createResponse(
                 200,
                 createContentError(`El usuario ${correo_user} no existe`)
