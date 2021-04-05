@@ -1,10 +1,15 @@
 const { inject ,errorHandler } = require("express-custom-error");
+const { validateOrigin } = require("./middlewares");
+const express = require("express");
+const cors = require("cors");
+
 inject();
 
-const express = require("express");
 const app = express();
 
-const cors = require("cors");
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 app.use(cors({ origin: true }));
 
 app.use("*", (req, res, next) => {
@@ -12,13 +17,7 @@ app.use("*", (req, res, next) => {
     next();
 });
 
-const { validateOrigin } = require("./middlewares");
 app.use(validateOrigin);
-
-// const bodyParse = require("body-parser");
-
-// app.use(bodyParse.urlencoded({ extended: true }));
-// app.use(bodyParse.json());
 
 app.use("*", (req, res, next) => {
     if (typeof req.body === "string") {
