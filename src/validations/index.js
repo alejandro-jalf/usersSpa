@@ -14,6 +14,20 @@ const {
 
 const validations = (() => {
     const validateBodyCrateUser = (bodyUser) => {
+        if (!bodyUser) {
+            return createContentError(
+                'Se esperaba recivir un objeto y se recivio un valor indefinido',
+                bodyUser
+            );
+        }
+
+        if (typeof bodyUser !== 'object') {
+            return createContentError(
+                'Se esperaba un objeto y se recivio un valor distinto de un objeto',
+                bodyUser
+            );
+        }
+
         let resultValidate = schemaCreateUser.validate(bodyUser);
         if (resultValidate.error) {
             return createContentError("Algun dato fue enviado de manera incorrecta", resultValidate.error);
@@ -37,7 +51,21 @@ const validations = (() => {
     }
 
     const validateBodyLogin = (bodyLogin) => {
-        let resultValidate = schemaCreateUser.validate(bodyLogin);
+        if (!bodyLogin) {
+            return createContentError(
+                'Se esperaba recivir un objeto y se recivio un valor indefinido',
+                bodyLogin
+            );
+        }
+
+        if (typeof bodyLogin !== 'object') {
+            return createContentError(
+                'Se esperaba un objeto y se recivio un valor distinto de un objeto',
+                bodyLogin
+            );
+        }
+
+        let resultValidate = schemaLogin.validate(bodyLogin);
         if (resultValidate.error) {
             return createContentError("Algun dato fue enviado de manera incorrecta", resultValidate.error);
         }
@@ -46,6 +74,20 @@ const validations = (() => {
     }
 
     const validateBodyUpdateUser = (bodyUser) => {
+        if (!bodyUser) {
+            return createContentError(
+                'Se esperaba recivir un objeto y se recivio un valor indefinido',
+                bodyUser
+            );
+        }
+
+        if (typeof bodyUser !== 'object') {
+            return createContentError(
+                'Se esperaba un objeto y se recivio un valor distinto de un objeto',
+                bodyUser
+            );
+        }
+
         let resultValidate = schemaUpdateUser.validate(bodyUser);
         if (resultValidate.error) {
             return createContentError("Algun dato fue enviado de manera incorrecta", resultValidate.error);
@@ -55,6 +97,20 @@ const validations = (() => {
     }
 
     const validateBodyUpdateDataUser = (bodyData) => {
+        if (!bodyData) {
+            return createContentError(
+                'Se esperaba recivir un objeto y se recivio un valor indefinido',
+                bodyData
+            );
+        }
+
+        if (typeof bodyData !== 'object') {
+            return createContentError(
+                'Se esperaba un objeto y se recivio un valor distinto de un objeto',
+                bodyData
+            );
+        }
+        
         let resultValidate = schemaUpdateDataGeneral.validate(bodyData);
         if (resultValidate.error) {
             return createContentError("Algun dato fue enviado de manera incorrecta", resultValidate.error);
@@ -64,6 +120,20 @@ const validations = (() => {
     }
 
     const validateBodyUpdateEmail = (bodyEmail) => {
+        if (!bodyEmail) {
+            return createContentError(
+                'Se esperaba recivir un objeto y se recivio un valor indefinido',
+                bodyEmail
+            );
+        }
+
+        if (typeof bodyEmail !== 'object') {
+            return createContentError(
+                'Se esperaba un objeto y se recivio un valor distinto de un objeto',
+                bodyEmail
+            );
+        }
+
         let resultValidate = schemaUpdateEmail.validate(bodyEmail);
         if (resultValidate.error) {
             return createContentError("Algun dato fue enviado de manera incorrecta", resultValidate.error);
@@ -73,6 +143,20 @@ const validations = (() => {
     }
 
     const validateBodyUpdatePassword = (bodyPassword) => {
+        if (!bodyPassword) {
+            return createContentError(
+                'Se esperaba recivir un objeto y se recivio un valor indefinido',
+                bodyPassword
+            );
+        }
+
+        if (typeof bodyPassword !== 'object') {
+            return createContentError(
+                'Se esperaba un objeto y se recivio un valor distinto de un objeto',
+                bodyPassword
+            );
+        }
+
         let resultValidate = schemaUpdatePassword.validate(bodyPassword);
         if (resultValidate.error) {
             return createContentError("Algun dato fue enviado de manera incorrecta", resultValidate.error);
@@ -96,6 +180,20 @@ const validations = (() => {
     }
 
     const validateBodyUpdateRecovery = (bodyRecovery) => {
+        if (!bodyRecovery) {
+            return createContentError(
+                'Se esperaba recivir un objeto y se recivio un valor indefinido',
+                bodyRecovery
+            );
+        }
+
+        if (typeof bodyRecovery !== 'object') {
+            return createContentError(
+                'Se esperaba un objeto y se recivio un valor distinto de un objeto',
+                bodyRecovery
+            );
+        }
+
         let resultValidate = schemaUpdateRecovery.validate(bodyRecovery);
         if (resultValidate.error) {
             return createContentError("Algun dato fue enviado de manera incorrecta", resultValidate.error);
@@ -106,6 +204,20 @@ const validations = (() => {
 
 
     const validateBodyUpdateStatus = (bodyStatus) => {
+        if (!bodyStatus) {
+            return createContentError(
+                'Se esperaba recivir un objeto y se recivio un valor indefinido',
+                bodyStatus
+            );
+        }
+
+        if (typeof bodyStatus !== 'object') {
+            return createContentError(
+                'Se esperaba un objeto y se recivio un valor distinto de un objeto',
+                bodyStatus
+            );
+        }
+
         let resultValidate = schemaUpdateStatus.validate(bodyStatus);
         if (resultValidate.error) {
             return createContentError("Algun dato fue enviado de manera incorrecta", resultValidate.error);
