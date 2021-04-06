@@ -100,6 +100,14 @@ const validations = (() => {
         if (resultValidate.error) {
             return createContentError("Algun dato fue enviado de manera incorrecta", resultValidate.error);
         }
+        
+        if (
+            bodyUser.tipo_user != "invited" &&
+            bodyUser.tipo_user != "manager" &&
+            bodyUser.tipo_user != "executive"
+        ) {
+            return createContentError("El tipo de usuario que mando no es valido");
+        }
 
         return createContentAssert("Validacion correcta");
     }
