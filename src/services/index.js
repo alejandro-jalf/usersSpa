@@ -57,6 +57,14 @@ const services = (() => {
         bodyUser.password_user = encriptData(bodyUser.password_user);
         const result = await modelCreateUser(cadenaConexion, bodyUser);
         if (!result.success) {
+            const details = result.error.parent.detail;
+            if (details) {
+                if (details.slice(-15) === 'already exists.')
+                    return createResponse(
+                        200,
+                        createContentError(`El usuario ${bodyUser.correo_user} ya exta registrado`, result.error.parent)
+                    );
+            }
             return createResponse(500, result);
         }
         return createResponse(201, result);
