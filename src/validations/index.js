@@ -46,6 +46,14 @@ const validations = (() => {
         if (resultValidate.error) {
             return createContentError("La contraseña debe contener al menos un numero", resultValidate.error);
         }
+        
+        if (
+            bodyUser.tipo_user != "invited" &&
+            bodyUser.tipo_user != "manager" &&
+            bodyUser.tipo_user != "executive"
+        ) {
+            return createContentError("El tipo de usuario que mando no es valido");
+        }
 
         return createContentAssert("Validacion correcta");
     }
