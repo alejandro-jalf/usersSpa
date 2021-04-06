@@ -219,12 +219,6 @@ const services = (() => {
         const password_user_encript = encriptData(bodyPassword.password_user);
         const new_password_user_encript = encriptData(bodyPassword.new_password_user);
 
-        if (bodyPassword.new_password_user === bodyPassword.password_user)
-        return createResponse(
-            200,
-            createContentError('La contraseña nueva es igual a la que tiene actualmente')
-        );
-
         let resultQuery = await modelGetUserByEmail(cadenaConexion, correo_user);
         if (!resultQuery.success)
             return createResponse(500, resultQuery);
@@ -236,11 +230,25 @@ const services = (() => {
                 createContentError(`El usuario ${correo_user} no existe`)
             );
 
-        if (dataBaseUser.password_user !== password_user_encript)
+        if (dataBaseUser.password_user !== password_user_encript) {
+            if (dataBaseUser.recovery_code_user === 'empty') {
+                return createResponse(
+                    401,
+                    createContentError('La contraseña es incorrecta')
+                );
+            }
+            if (dataBaseUser.recovery_code_user !== bodyPassword.password_user)
+                return createResponse(
+                    401,
+                    createContentError('La contraseña y el codigo de recuperacion es incorrecto')
+                );
+        }
+        
+        if (bodyPassword.new_password_user === bodyPassword.password_user)
             return createResponse(
-                401,
-                createContentError('La contraseña es incorrecta')
-            );
+                200,
+                createContentError('La contraseña nueva es igual a la que tiene actualmente')
+            );    
 
         bodyPassword.new_password_user = new_password_user_encript;
         resultQuery = await modelUpdatePassword(cadenaConexion, correo_user, bodyPassword);
@@ -281,7 +289,6 @@ const services = (() => {
                 createContentError('Ocurrio un error al intentar enviar el codigo de recuperacion a su correo, por favor intentelo mas tarde')
             );
         }
-
 
         return createResponse(200, resultQuery);
     }

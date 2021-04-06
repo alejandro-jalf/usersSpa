@@ -170,7 +170,7 @@ const validations = (() => {
             return createContentError("Algun dato fue enviado de manera incorrecta", resultValidate.error);
         }
 
-        if (bodyUser.new_password_user.length < 7) {
+        if (bodyPassword.new_password_user.length < 7) {
             return createContentError('La contraseña debe ser mayor de 6 caracteres');
         }
 
