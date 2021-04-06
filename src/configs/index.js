@@ -2,7 +2,7 @@ require("mandatoryenv").load();
 
 const configs = (() => {
 
-    const port = process.env.USERSPA_PORT || 3000;
+    const port = process.env.PORT || 5000;
     const node_env = process.env.USERSPA_ENV || 'develop';
     const token = process.env.USERSPA_TOKEN;
     const origin1 = process.env.USERSPA_ORIGIN1;
