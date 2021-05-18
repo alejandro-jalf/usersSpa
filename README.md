@@ -20,6 +20,7 @@ Api rest simple para el logueo de usuarios de la aplicacion de super promociones
 | tipo_user | varchar | 10 | only('invited', 'manager', 'executive') |
 | access_to_user | text | | Texto divido por comas, simulando un array |
 | activo_user | boolean | | |
+| principal | varchar(100) | | Marca la pagina que se abrira primero |
 
 ## Estructura de la api rest
 
