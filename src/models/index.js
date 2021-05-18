@@ -52,11 +52,11 @@ const models = (() => {
             const result = await accessToDataBase.query(
                 `INSERT INTO users(
                     nombre_user, apellido_p_user, apellido_m_user, direccion_user, sucursal_user,
-                    correo_user, password_user, tipo_user, access_to_user
+                    correo_user, password_user, tipo_user, access_to_user, principal
                 ) VALUES(
                     '${bodyUser.nombre_user}', '${bodyUser.apellido_p_user}', '${bodyUser.apellido_m_user}',
                     '${bodyUser.direccion_user}', '${bodyUser.sucursal_user}', '${bodyUser.correo_user}',
-                    '${bodyUser.password_user}', '${bodyUser.tipo_user}','${bodyUser.access_to_user}'
+                    '${bodyUser.password_user}', '${bodyUser.tipo_user}','${bodyUser.access_to_user}', index
                 )`,
                 QueryTypes.INSERT
             );
@@ -191,6 +191,25 @@ const models = (() => {
         }
     }
 
+    const modelUpdatePrincipal = async (stringConection, correo_user, bodyPrincipal) => {
+        try {
+            const accessToDataBase = conexion.getConexion(stringConection);
+            const result = await accessToDataBase.query(
+                `UPDATE users SET
+                    principal = '${bodyPrincipal.principal}'
+                WHERE correo_user = '${correo_user}'`,
+                QueryTypes.UPDATE
+            );
+            await conexion.closeConexion();
+            return createContentAssert(`Se ha registrado a ${bodyPrincipal.principal} como pestaña principal`, result);
+        } catch (error) {
+            return createContentError(
+                'Fallo la conexion con base de datos al intentar la pestaña principal ',
+                error
+            );
+        }
+    }
+
     const modelDeleteUser = async (stringConection, correo_user) => {
         try {
             const accessToDataBase = conexion.getConexion(stringConection);
@@ -218,6 +237,7 @@ const models = (() => {
         modelUpdatePassword,
         modelUpdateRecoveryCode,
         modelUpdateStatus,
+        modelUpdatePrincipal,
         modelDeleteUser,
     }
 })();

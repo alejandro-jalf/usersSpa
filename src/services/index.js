@@ -16,7 +16,8 @@ const {
     modelUpdateEmail,
     modelUpdateStatus,
     modelDeleteUser,
-    modelUpdateRecoveryCode
+    modelUpdateRecoveryCode,
+    modelUpdatePrincipal
 } = require("../models");
 const {
     validateBodyCrateUser,
@@ -26,6 +27,7 @@ const {
     validateBodyUpdateEmail,
     validateBodyUpdatePassword,
     validateBodyUpdateStatus,
+    validateBodyUpdatePrincipal,
 } = require('../validations');
 
 const services = (() => {
@@ -314,6 +316,28 @@ const services = (() => {
         return createResponse(200, resultQuery);
     }
 
+    const updateMain = async (correo_user, bodyPrincipal) => {
+        const resultValidate = validateBodyUpdatePrincipal(bodyPrincipal);
+        if (!resultValidate.success)
+            return createResponse(400, resultValidate);
+
+        let resultQuery = await modelGetUserByEmail(cadenaConexion, correo_user);
+        if (!resultQuery.success)
+            return createResponse(500, resultQuery);
+
+        const dataBaseUser = resultQuery.data[0];
+        if (!dataBaseUser)
+            return createResponse(
+                200,
+                createContentError(`El usuario ${correo_user} no existe`)
+            );
+
+        resultQuery = await modelUpdatePrincipal(cadenaConexion, correo_user, bodyPrincipal);
+        if (!resultQuery.success) return createResponse(500, resultQuery);
+
+        return createResponse(200, resultQuery);
+    }
+
     const deleteUser = async (correo_user) => {
         let resultQuery = await modelGetUserByEmail(cadenaConexion, correo_user);
         if (!resultQuery.success)
@@ -343,6 +367,7 @@ const services = (() => {
         updatePassword,
         recoveryCount,
         updateStatus,
+        updateMain,
         deleteUser,
     }
 })();

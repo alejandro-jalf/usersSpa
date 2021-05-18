@@ -1,4 +1,4 @@
-// require("mandatoryenv").load();
+require("mandatoryenv").load();
 
 const configs = (() => {
 

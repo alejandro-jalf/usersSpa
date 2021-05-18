@@ -11,6 +11,7 @@ const {
     getUserByEmail,
     updatePassword,
     updateDataGeneral,
+    updateMain,
 } = require("../services");
 
 router.route('/api/v1').get(async (req, res) => {
@@ -82,6 +83,13 @@ router.route('/api/v1/usuarios/:correo_user/status').put(async (req, res) => {
     const { correo_user } = req.params;
     const bodyStatus = req.body;
     const { status, response } = await updateStatus(correo_user, bodyStatus);
+    res.status(status).json(response);
+});
+
+router.route('/api/v1/usuarios/:correo_user/main').put(async (req, res) => {
+    const { correo_user } = req.params;
+    const bodyStatus = req.body;
+    const { status, response } = await updateMain(correo_user, bodyStatus);
     res.status(status).json(response);
 });
 

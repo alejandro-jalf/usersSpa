@@ -10,6 +10,7 @@ const {
     schemaUpdatePassword,
     schemaUpdateRecovery,
     schemaUpdateStatus,
+    schemaPrincipal,
 } = require('../schema');
 
 const validations = (() => {
@@ -242,6 +243,29 @@ const validations = (() => {
         return createContentAssert("Validacion correcta");
     }
 
+    const validateBodyUpdatePrincipal = (bodyPrincipal) => {
+        if (!bodyPrincipal) {
+            return createContentError(
+                'Se esperaba recivir un objeto y se recivio un valor indefinido',
+                bodyPrincipal
+            );
+        }
+
+        if (typeof bodyPrincipal !== 'object') {
+            return createContentError(
+                'Se esperaba un objeto y se recivio un valor distinto de un objeto',
+                bodyPrincipal
+            );
+        }
+
+        let resultValidate = schemaPrincipal.validate(bodyPrincipal);
+        if (resultValidate.error) {
+            return createContentError("Algun dato fue enviado de manera incorrecta", resultValidate.error);
+        }
+
+        return createContentAssert("Validacion correcta");
+    }
+
 
     return {
         validateBodyCrateUser,
@@ -252,6 +276,7 @@ const validations = (() => {
         validateBodyUpdatePassword,
         validateBodyUpdateRecovery,
         validateBodyUpdateStatus,
+        validateBodyUpdatePrincipal,
     }
 })();
 

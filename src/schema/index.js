@@ -59,6 +59,10 @@ const schemas = (() => {
         activo_user: joi.boolean().required()
     });
 
+    const schemaPrincipal = joi.object({
+        principal: joi.string().min(1).max(100).required()
+    });
+
     return {
         schemaContentLetters,
         schemaContentNumbers,
@@ -70,6 +74,7 @@ const schemas = (() => {
         schemaUpdatePassword,
         schemaUpdateRecovery,
         schemaUpdateStatus,
+        schemaPrincipal,
     }
 })();
 
