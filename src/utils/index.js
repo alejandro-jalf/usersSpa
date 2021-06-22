@@ -20,62 +20,26 @@ const utils = (() => {
     ];
 
     const completeDataForDate = (value, length = 2) => {
-        if (length === 2) {
-            if (value.toString().length === 1) {
-                return `0${value}`;
-            }
-            return value;
-        }
+        if (length === 2)
+            if (value.toString().length === 1) return `0${value}`
         if (length === 3) {
-            if (value.toString().length === 1) {
-                return `00${value}`
-            }
-            if (value.toString().length === 2) {
-                return `0${value}`
-            }
-            return value;
+            if (value.toString().length === 1) return `00${value}`
+            if (value.toString().length === 2) return `0${value}`
         }
         return value;
     }
     
-    const encriptData = (message) => {
-        return sha1(message);
-    }
+    const encriptData = (message) => sha1(message);
 
-    const createContentAssert = (message, data = null) => {
-        if (data === null) {
-            return {
-                success: true,
-                message
-            }
-        }
-        return {
-            success: true,
-            message,
-            data
-        }
-    }
+    const createContentAssert = (message, data = null) => (data === null) ?
+        { success: true, message } :
+        { success: true, message, data}
 
-    const createContentError = (message, error = null) => {
-        if (error === null) {
-            return {
-                success: false,
-                message
-            }
-        }
-        return {
-            success: false,
-            message,
-            error
-        }
-    }
+    const createContentError = (message, error = null) => (error === null) ?
+        { success: false, message } :
+        { success: false, message, error }
 
-    const createResponse = (status, response) => {
-        return {
-            status,
-            response,
-        }
-    }
+    const createResponse = (status, response) => ({ status, response })
 
     const sendEmail = async (to, code) => {
         const transporter = mail.createTransport({
