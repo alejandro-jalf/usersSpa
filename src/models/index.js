@@ -50,7 +50,7 @@ const models = (() => {
         try {
             const accessToDataBase = conexion.getConexion(stringConection);
             const result = await accessToDataBase.query(
-                'SELECT * FROM versiones ORDER BY fechadelanzamiento DESC LIMIT 1',
+                'SELECT * FROM versiones ORDER BY fechadelanzamiento DESC',
                 QueryTypes.SELECT
             );
             await conexion.closeConexion();

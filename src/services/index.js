@@ -49,10 +49,31 @@ const services = (() => {
             );
         }
         const dataUser = response;
-        response = await modelGetVersionsApp(cadenaConexion);
-        if (response.success) dataUser.data[0].nuevaversion = response.data[0]
-        else dataUser.data[0].nuevaversion = {}
+        const versions = await getVersionByAccess(response.data[0].access_to_user);
+        dataUser.data[0].novedades = versions;
         return createResponse(200, dataUser);
+    }
+
+    const getVersionByAccess = async (access = '') => {
+        const response = await modelGetVersionsApp(cadenaConexion);
+        const accessTabs = access.split(',');
+        let findedTab;
+        if (response.success) {
+            const finded = response.data.filter((version) => {
+                findedTab = false;
+                const tabs = version.paginasactualizadas.split(',');
+                for (let index = 0; index < accessTabs.length; index++) {
+                    const versionFinded = tabs.find((tab) => tab === accessTabs[index]);
+                    if (versionFinded) {
+                        findedTab = true;
+                        index = accessTabs.length;
+                    }
+                }
+                if (findedTab) return version;
+            })
+            return finded
+        }
+        return {}
     }
 
     const createUser = async (bodyUser) => {
@@ -114,9 +135,8 @@ const services = (() => {
         delete dataBaseUser.password_user;
         delete dataBaseUser.recovery_code_user;
 
-        const response = await modelGetVersionsApp(cadenaConexion);
-        if (response.success) dataBaseUser.nuevaversion = response.data[0]
-        else dataBaseUser.nuevaversion = {}
+        const versions = await getVersionByAccess(dataBaseUser.access_to_user);
+        dataBaseUser.data[0].novedades = versions;
 
         return createResponse(
             200,
