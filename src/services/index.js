@@ -73,7 +73,7 @@ const services = (() => {
             })
             return finded
         }
-        return {}
+        return []
     }
 
     const createUser = async (bodyUser) => {
