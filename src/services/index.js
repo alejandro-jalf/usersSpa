@@ -17,7 +17,8 @@ const {
     modelUpdateStatus,
     modelDeleteUser,
     modelUpdateRecoveryCode,
-    modelUpdatePrincipal
+    modelUpdatePrincipal,
+    modelGetVersionsApp,
 } = require("../models");
 const {
     validateBodyCrateUser,
@@ -40,14 +41,18 @@ const services = (() => {
     }
 
     const getUserByEmail = async (correo_user) => {
-        const response = await modelGetUserByEmail(cadenaConexion, correo_user);
+        let response = await modelGetUserByEmail(cadenaConexion, correo_user);
         if (response.data.length === 0) {
             return createResponse(
                 200, 
                 createContentError(`El usuario ${correo_user} no esta registrado`)
             );
         }
-        return createResponse(200, response);
+        const dataUser = response;
+        response = await modelGetVersionsApp(cadenaConexion);
+        if (response.success) dataUser.data[0].nuevaversion = response.data[0]
+        else dataUser.data[0].nuevaversion = {}
+        return createResponse(200, dataUser);
     }
 
     const createUser = async (bodyUser) => {
@@ -108,6 +113,10 @@ const services = (() => {
 
         delete dataBaseUser.password_user;
         delete dataBaseUser.recovery_code_user;
+
+        const response = await modelGetVersionsApp(cadenaConexion);
+        if (response.success) dataBaseUser.nuevaversion = response.data[0]
+        else dataBaseUser.nuevaversion = {}
 
         return createResponse(
             200,

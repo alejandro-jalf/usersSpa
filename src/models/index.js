@@ -46,6 +46,23 @@ const models = (() => {
         }
     }
 
+    const modelGetVersionsApp = async (stringConection) => {
+        try {
+            const accessToDataBase = conexion.getConexion(stringConection);
+            const result = await accessToDataBase.query(
+                'SELECT * FROM versiones ORDER BY fechadelanzamiento DESC LIMIT 1',
+                QueryTypes.SELECT
+            );
+            await conexion.closeConexion();
+            return createContentAssert('Versiones de la aplicacion', result[0]);
+        } catch (error) {
+            return createContentError(
+                'Fallo la conexion con base de datos al intentar obtener las versiones de la aplicacion',
+                error
+            );
+        }
+    }
+
     const modelCreateUser = async (stringConection, bodyUser) => {
         try {
             const accessToDataBase = conexion.getConexion(stringConection);
@@ -229,6 +246,7 @@ const models = (() => {
 
     return {
         modelGetAllUser,
+        modelGetVersionsApp,
         modelGetUserByEmail,
         modelCreateUser,
         modelUpdateUSer,
