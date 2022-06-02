@@ -136,7 +136,7 @@ const services = (() => {
         delete dataBaseUser.recovery_code_user;
 
         const versions = await getVersionByAccess(dataBaseUser.access_to_user);
-        dataBaseUser.data[0].novedades = versions;
+        dataBaseUser.novedades = versions;
 
         return createResponse(
             200,
