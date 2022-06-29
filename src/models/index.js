@@ -73,7 +73,7 @@ const models = (() => {
                 ) VALUES(
                     '${bodyUser.nombre_user}', '${bodyUser.apellido_p_user}', '${bodyUser.apellido_m_user}',
                     '${bodyUser.direccion_user}', '${bodyUser.sucursal_user}', '${bodyUser.correo_user}',
-                    '${bodyUser.password_user}', '${bodyUser.tipo_user}','${bodyUser.access_to_user}', 'Inicio'
+                    '${bodyUser.password_user}', '${bodyUser.tipo_user}','${bodyUser.access_to_user}', 'index'
                 )`,
                 QueryTypes.INSERT
             );
